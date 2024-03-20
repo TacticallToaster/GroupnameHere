@@ -11,6 +11,7 @@ UHealthComponent::UHealthComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+	CurrentHealth = MaxHealth;
 }
 
 

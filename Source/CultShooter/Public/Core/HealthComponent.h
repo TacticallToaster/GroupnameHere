@@ -8,7 +8,7 @@
 #include "Engine/TimerHandle.h"
 #include "HealthComponent.generated.h"
 
-
+DECLARE_DELEGATE_OneParam(FDamageDelegate, float)
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CULTSHOOTER_API UHealthComponent : public UActorComponent
 {
