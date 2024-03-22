@@ -3,14 +3,14 @@
 
 #include "Core/LlamaPlayerController.h"
 
-void ALlamaPlayerController::OnPossess(APawn* Pawn)
+void ALlamaPlayerController::OnPossess(APawn* InPawn)
 {
-	Super::OnPossess(Pawn);
-	if (APlayerCharacter* PlayerPawn = Cast<APlayerCharacter>(Pawn))
-	{
-		// Get the Player UI class from the PlayerCharacter
-	}
-	if (UHealthComponent* HealthComponent = Pawn->GetComponentByClass<UHealthComponent>())
+	Super::OnPossess(InPawn);
+	//if (APlayerCharacter* PlayerPawn = Cast<APlayerCharacter>(Pawn))
+	//{
+	//	// Get the Player UI class from the PlayerCharacter
+	//}
+	if (UHealthComponent* HealthComponent = InPawn->GetComponentByClass<UHealthComponent>())
 	{
 
 	}

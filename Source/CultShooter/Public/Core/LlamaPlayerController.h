@@ -7,7 +7,7 @@
 #include "Core/HealthComponent.h"
 #include "LlamaPlayerController.generated.h"
 
-class APlayerCharacter;
+
 /**
  * 
  */
@@ -16,7 +16,7 @@ class CULTSHOOTER_API ALlamaPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 protected:
-	virtual void OnPossess(APawn* Pawn) override;
+	virtual void OnPossess(APawn* InPawn) override;
 
 	UUserWidget* CurrentUI;
 };
