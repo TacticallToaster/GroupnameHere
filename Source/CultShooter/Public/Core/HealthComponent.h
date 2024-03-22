@@ -1,9 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+// Code written by Tommy Brekke
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/ProgressBar.h"
 #include "TimerManager.h"
 #include "Engine/TimerHandle.h"
 #include "HealthComponent.generated.h"
@@ -24,6 +26,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void ModifyHealth(float HealthDelta);
 	UFUNCTION(BlueprintCallable, Category = "Health")
+	void ApplyDamage(float DamageToApply);
+	UFUNCTION(BlueprintCallable, Category = "Health")
 	void Die();
 
 protected:
@@ -43,5 +47,6 @@ protected:
 	void GraceCompleted();
 	FTimerHandle GraceTimer;
 
-		
+	UPROPERTY(BlueprintReadWrite, Category = "UI")
+	UProgressBar* HealthBarWidget;
 };

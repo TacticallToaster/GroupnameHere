@@ -55,6 +55,15 @@ void UHealthComponent::ModifyHealth(float HealthDelta)
 			GetOwner()->GetWorldTimerManager().SetTimer(GraceTimer, this, &UHealthComponent::GraceCompleted, GracePeriod);
 		}
 	}
+	if (HealthBarWidget)
+	{
+		HealthBarWidget->Percent = CurrentHealth / MaxHealth;
+	}
+}
+
+void UHealthComponent::ApplyDamage(float DamageToApply)
+{
+	ModifyHealth(-DamageToApply);
 }
 
 void UHealthComponent::GraceCompleted()
