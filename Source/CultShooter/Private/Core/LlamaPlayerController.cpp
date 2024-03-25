@@ -3,15 +3,24 @@
 
 #include "Core/LlamaPlayerController.h"
 
-void ALlamaPlayerController::OnPossess(APawn* InPawn)
+void ALlamaPlayerController::AcknowledgePossession(APawn* InPawn)
 {
-	Super::OnPossess(InPawn);
-	//if (APlayerCharacter* PlayerPawn = Cast<APlayerCharacter>(Pawn))
-	//{
-	//	// Get the Player UI class from the PlayerCharacter
-	//}
+	Super::AcknowledgePossession(InPawn);
+
+	if (APlayerCharacter* PlayerPawn = Cast<APlayerCharacter>(InPawn))
+	{
+		// Get the Player UI class from the PlayerCharacter
+		if (PlayerPawn->UIClass)
+		{
+			CurrentUI = CreateWidget(this, PlayerPawn->UIClass, "PlayerUI");
+			CurrentUI->AddToViewport();
+		}
+	}
 	if (UHealthComponent* HealthComponent = InPawn->GetComponentByClass<UHealthComponent>())
 	{
-
+		if (UPlayerUI* PlayerUI = Cast<UPlayerUI>(CurrentUI))
+		{
+			HealthComponent->AssignUI(PlayerUI->HealthBar);
+		}
 	}
 }

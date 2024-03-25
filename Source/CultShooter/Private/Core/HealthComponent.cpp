@@ -77,3 +77,8 @@ void UHealthComponent::Die()
 	GetOwner()->Destroy();
 }
 
+void UHealthComponent::AssignUI(UProgressBar* InHealthBar)
+{
+	HealthBarWidget = InHealthBar;
+}
+

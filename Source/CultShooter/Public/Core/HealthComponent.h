@@ -29,6 +29,7 @@ public:
 	void ApplyDamage(float DamageToApply);
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void Die();
+	void AssignUI(UProgressBar* InHealthBar);
 
 protected:
 	// Called when the game starts

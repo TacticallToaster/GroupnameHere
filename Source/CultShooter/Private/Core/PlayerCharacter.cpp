@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PlayerCharacter.h"
-#include  "Camera/CameraComponent.h"
+#include "Core/PlayerCharacter.h"
+#include "Camera/CameraComponent.h"
 #include "InputCoreTypes.h"
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
@@ -66,11 +66,11 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	const FString TheFloatStr = FString::SanitizeFloat(GetCharacterMovement()->MaxWalkSpeed);
+	/*const FString TheFloatStr = FString::SanitizeFloat(GetCharacterMovement()->MaxWalkSpeed);
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *TheFloatStr);
-	}
+	}*/
 
 }
 

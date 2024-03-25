@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Core/PlayerUI.h"
 #include "Core/HealthComponent.h"
+#include "Core/PlayerCharacter.h"
 #include "LlamaPlayerController.generated.h"
-
 
 /**
  * 
@@ -16,7 +17,9 @@ class CULTSHOOTER_API ALlamaPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 protected:
-	virtual void OnPossess(APawn* InPawn) override;
+	UFUNCTION()
+	virtual void AcknowledgePossession(APawn* InPawn) override;
 
+	UPROPERTY(VisibleAnywhere, Category = "UI")
 	UUserWidget* CurrentUI;
 };

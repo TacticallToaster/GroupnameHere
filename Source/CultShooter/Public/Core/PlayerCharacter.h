@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Core/PlayerUI.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -84,4 +85,7 @@ public:
 	void Jump() override;
 	void StartRunning();
 	void StopRunning();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<UPlayerUI> UIClass;
 };
