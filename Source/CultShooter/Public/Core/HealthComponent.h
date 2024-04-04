@@ -8,7 +8,10 @@
 #include "Components/ProgressBar.h"
 #include "TimerManager.h"
 #include "Engine/TimerHandle.h"
+#include "Core/Mortal.h"
 #include "HealthComponent.generated.h"
+
+
 
 DECLARE_DELEGATE_OneParam(FDamageDelegate, float)
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -27,6 +30,8 @@ public:
 	void ModifyHealth(float HealthDelta);
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void ApplyDamage(float DamageToApply);
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	void ResetHealth();
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void Die();
 	void AssignUI(UProgressBar* InHealthBar);

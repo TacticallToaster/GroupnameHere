@@ -44,6 +44,11 @@ APlayerCharacter::APlayerCharacter()
 	WalkingSpeed = 600.f;
 	SprintSpeed = 800.f;
 	IsSprinting = false;
+
+	if (!PlayerSaveData)
+	{
+		PlayerSaveData = Cast<ULlamaSaveGame>(UGameplayStatics::CreateSaveGameObject(ULlamaSaveGame::StaticClass()));
+	}
 }
 
 // Called when the game starts or when spawned
@@ -59,6 +64,33 @@ void APlayerCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(Imc, 0);
 		}
+	}
+	if (!PlayerSaveData)
+	{
+		PlayerSaveData = Cast<ULlamaSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("CurrentSave"), 0));
+	}
+	SavePlayerData();
+}
+
+void APlayerCharacter::SavePlayerData()
+{
+	if (PlayerSaveData && (GetActorLocation() - PlayerSaveData->PlayerLocation).Length() > 50)
+	{
+		PlayerSaveData->PlayerLocation = GetActorLocation();
+		PlayerSaveData->PlayerRotation = GetActorRotation();
+		if (UGameplayStatics::SaveGameToSlot(PlayerSaveData,TEXT("CurrentSave"),0))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
+		}
+	}
+}
+
+void APlayerCharacter::LoadPlayerData()
+{
+	if (PlayerSaveData)
+	{
+		SetActorLocation(PlayerSaveData->PlayerLocation);
+		SetActorRotation(PlayerSaveData->PlayerRotation);
 	}
 }
 
@@ -90,6 +122,16 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &APlayerCharacter::StartRunning);
 	EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &APlayerCharacter::StopRunning);
+
+	EnhancedInputComponent->BindAction(LoadAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LoadPlayerData);
+}
+
+void APlayerCharacter::Die()
+{
+	if (PlayerSaveData)
+	{
+		LoadPlayerData();
+	}
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)

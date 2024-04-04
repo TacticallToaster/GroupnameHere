@@ -57,13 +57,22 @@ void UHealthComponent::ModifyHealth(float HealthDelta)
 	}
 	if (HealthBarWidget)
 	{
-		HealthBarWidget->Percent = CurrentHealth / MaxHealth;
+		HealthBarWidget->SetPercent(CurrentHealth / MaxHealth);
 	}
 }
 
 void UHealthComponent::ApplyDamage(float DamageToApply)
 {
 	ModifyHealth(-DamageToApply);
+}
+
+void UHealthComponent::ResetHealth()
+{
+	CurrentHealth = MaxHealth;
+	if (HealthBarWidget)
+	{
+		HealthBarWidget->SetPercent(1);
+	}
 }
 
 void UHealthComponent::GraceCompleted()
@@ -74,7 +83,15 @@ void UHealthComponent::GraceCompleted()
 
 void UHealthComponent::Die()
 {
-	GetOwner()->Destroy();
+	if (IMortal* PlayerCharacter = Cast<IMortal>(GetOwner()))
+	{
+		PlayerCharacter->Die();
+		ResetHealth();
+	}
+	else
+	{
+		GetOwner()->Destroy();
+	}
 }
 
 void UHealthComponent::AssignUI(UProgressBar* InHealthBar)

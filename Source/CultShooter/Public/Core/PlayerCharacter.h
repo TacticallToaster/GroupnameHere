@@ -9,11 +9,14 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Core/PlayerUI.h"
+#include "Core/LlamaSaveGame.h"
+#include "Core/Mortal.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class CULTSHOOTER_API APlayerCharacter : public ACharacter
+class CULTSHOOTER_API APlayerCharacter : public ACharacter, public IMortal
 {
 	GENERATED_BODY()
 
@@ -32,7 +35,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-public:
+	virtual void Die() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
+	ULlamaSaveGame* PlayerSaveData;
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	void LoadPlayerData();
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	void SavePlayerData();
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 	class USkeletalMeshComponent* MeshBody;
@@ -50,7 +61,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CameraMovement")
 	float SensitivityY;
 
-
+	// Input
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InputMapping")
 	class UInputMappingContext* Imc;
 
@@ -67,6 +78,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	class UInputAction* RunAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save")
+	class UInputAction* LoadAction;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
