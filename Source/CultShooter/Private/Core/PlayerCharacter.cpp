@@ -67,6 +67,7 @@ void APlayerCharacter::BeginPlay()
 	}
 	if (!PlayerSaveData)
 	{
+		PlayerSaveData = Cast<ULlamaSaveGame>(UGameplayStatics::CreateSaveGameObject(ULlamaSaveGame::StaticClass()));
 		PlayerSaveData = Cast<ULlamaSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("CurrentSave"), 0));
 	}
 	SavePlayerData();
