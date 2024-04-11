@@ -64,10 +64,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	class UInputAction* RunAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input Dash Movement")
 	class UInputAction* DashAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interact")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = " Input Interact")
 	class UInputAction* InteractionAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
@@ -76,26 +76,30 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	bool IsSprinting = false;
 
+	//Player walking speed
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float WalkingSpeed = 600.f;
 
+	//The speed when player is sprinting
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float SprintSpeed = 800.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Box Interaction")
-	class UBoxComponent* InteractionArea;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category= "Interact")
+	float InteractRange = 500.0f;
 
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category="Weapon")
+	bool bHasWeapon = false;
 
-	IInteractInterface* Interact = nullptr;
+	UFUNCTION(BlueprintCallable,Category = "Weapon")
+	void SetHasWeapon(bool bHasNewWeapon);
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	bool GetHasWeapon();
 
 	bool EnableShoot = false;
 
 
-	/*UPROPERTY()
-	class AProjectileActor* ProjectileFired;*/
-
-	/*bool bIsShooting = false;*/
-
+	
 	UFUNCTION()
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -103,17 +107,14 @@ public:
 	void StartRunning();
 	void StopRunning();
 	void Dashing();
-	void Interaction();
 	void Shoot();
-	/*void StopShoot();*/
-	/*void IsShooting();
-	void PlayerRotate();*/
 
-	UFUNCTION()
-	void OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION(Category="Interact")
+	void InteractWithObjects();
+	
 
-	UFUNCTION()
-	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
 
 
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting thing")

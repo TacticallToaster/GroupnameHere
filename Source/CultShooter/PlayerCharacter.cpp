@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
+#include "WeaponActor.h"
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -39,8 +40,6 @@ APlayerCharacter::APlayerCharacter()
 	Camera->bUsePawnControlRotation = false;
 
 
-	InteractionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("Interaction Area"));
-	InteractionArea->SetupAttachment(RootComponent);
 	
 }
 
@@ -59,9 +58,7 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 
-	InteractionArea->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBoxBeginOverlap);
-
-	InteractionArea->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnBoxEndOverlap);
+	
 
 	
 }
@@ -99,7 +96,22 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Dashing);
 
-	EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interaction);
+	EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Triggered, this, &APlayerCharacter::InteractWithObjects);
+}
+
+
+void APlayerCharacter::SetHasWeapon(bool bHasNewWeapon)
+{
+
+	bHasWeapon = bHasNewWeapon;
+
+}
+
+bool APlayerCharacter::GetHasWeapon()
+{
+
+	return bHasWeapon;
+
 }
 
 
@@ -169,17 +181,43 @@ void APlayerCharacter::Dashing()
 	}
 }
 
-void APlayerCharacter::Interaction()
+void APlayerCharacter::InteractWithObjects()
 {
+	const FVector StartTrace = Camera->GetComponentLocation();
+	FVector EndTrace = StartTrace + Camera->GetComponentRotation().Vector() * InteractRange;
 
-	if (Interact)
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+
+	CollisionParams.AddIgnoredActor(this);
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace, ECC_Visibility, CollisionParams))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *HitResult.GetActor()->GetName());
 
-		Interact->Interact();
+		if (HitResult.GetActor()->Implements<UInteractInterface>())
+		{
+			IInteractInterface::Execute_Interact(HitResult.GetActor());
+
+
+		}
+		USkeletalMeshComponent* SkeletalMesh = Cast<USkeletalMeshComponent>(HitResult.Component);
+		if (SkeletalMesh)
+		{
+			// Check if the skeletal mesh belongs to the gun
+			if (SkeletalMesh->GetOwner() && SkeletalMesh->GetOwner()->Implements<UInteractInterface>())
+			{
+				IInteractInterface::Execute_Interact(SkeletalMesh->GetOwner()); // Call the interaction function on the gun object
+			}
+		}
+		
+		
 
 	}
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor::Black, false, 3.0f, 12.0f);
 
 }
+
 
 void APlayerCharacter::Shoot()
 {
@@ -264,16 +302,5 @@ void APlayerCharacter::Shoot()
 //}
 
 
-void APlayerCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                         UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	Interact = Cast<IInteractInterface>(OtherActor);
 
-
-}
-
-void APlayerCharacter::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-}
 
