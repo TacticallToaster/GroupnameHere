@@ -21,10 +21,25 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "MainMenu", meta = (BindWidget))
 	UButton* StartGameButton;
+	UPROPERTY(EditAnywhere, Category = "MainMenu", meta = (BindWidget))
+	UButton* OptionsButton;
+	UPROPERTY(EditAnywhere, Category = "MainMenu", meta = (BindWidget))
+	UButton* ControlsButton;
+	UPROPERTY(EditAnywhere, Category = "MainMenu", meta = (BindWidget))
+	UButton* EndGameButton;
 
 protected:
 	UFUNCTION()
 	void OnStartGameClicked();
+
+	UFUNCTION()
+	void OnOptionsClicked();
+
+	UFUNCTION()
+	void OnControlsClicked();
+
+	UFUNCTION()
+	void OnEndGameClicked();
 
 	UPROPERTY(EditAnywhere)
 	FName StartLevel;
