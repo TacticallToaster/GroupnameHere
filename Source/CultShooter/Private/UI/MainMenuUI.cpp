@@ -15,5 +15,9 @@ void UMainMenuUI::OnStartGameClicked()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("You clicked start game, Congratulations!"));
 	}
-	
+	if (true)
+	{
+		UGameplayStatics::OpenLevel(this, StartLevel);
+
+	}
 }
